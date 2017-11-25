@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class Game extends JFrame implements Common{
     public Game() {
@@ -14,7 +13,7 @@ public class Game extends JFrame implements Common{
         setVisible(true);
     }
     public static void main(String[] args){
-        //Game entrance point
+        //Game entry point
         Game game = new Game();
     }
 }

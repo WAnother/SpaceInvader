@@ -1,12 +1,12 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 public class Sprite {
     private Image image;
     protected int x_cor;
     protected int y_cor;
-
+    protected int move_x;
+    protected int move_y;
     public void setXcor(int x){
         //set x coordinate
         x_cor = x;
@@ -38,7 +38,7 @@ public class Sprite {
     public void resizeImage(int x){
         //resize the image based on the given objective
         switch(x) {
-            case 1: image = image.getScaledInstance(200, 200, Image.SCALE_DEFAULT);
+            case 1: image = image.getScaledInstance(1000, 1000, Image.SCALE_DEFAULT);
             break;
         }
     }

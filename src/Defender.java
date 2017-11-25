@@ -15,22 +15,26 @@ public class Defender extends Sprite{
         setXcor(start_x);
         setYcor(start_y);
         loadImage(path);
+        setImageDimension();
         //resizeImage(1);
     }
     public void move(){
         x_cor += move_x;
         y_cor += move_y;
+        if(x_cor < 1){
+            x_cor = 1;
+        }
     }
-    public void KeyPressed(KeyEvent e){
+    public void keyPressed(KeyEvent e){
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_D){
-            move_x = 1;
+            move_x = 2;
         }
         if(key == KeyEvent.VK_A){
-            move_x = -1;
+            move_x = -2;
         }
     }
-    public void KeyReleased(KeyEvent e){
+    public void keyReleased(KeyEvent e){
         //if key is released then stop moving
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_D){
@@ -40,4 +44,5 @@ public class Defender extends Sprite{
             move_x = 0;
         }
     }
+
 }

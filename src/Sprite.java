@@ -7,6 +7,9 @@ public class Sprite {
     protected int y_cor;
     protected int move_x;
     protected int move_y;
+    protected int image_width;
+    protected int image_height;
+
     public void setXcor(int x){
         //set x coordinate
         x_cor = x;
@@ -34,6 +37,10 @@ public class Sprite {
     public Image getImage(){
         //return the image
         return image;
+    }
+    public void setImageDimension(){
+        image_width = image.getWidth(null);
+        image_height = image.getHeight(null);
     }
     public void resizeImage(int x){
         //resize the image based on the given objective

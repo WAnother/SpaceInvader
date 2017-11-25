@@ -6,6 +6,7 @@ public class Game extends JFrame implements Common{
         initGame();
     }
     private void initGame(){
+        //Create a new frame
         add(new Board());
         setSize(Frame_Width, Frame_Height);
         setTitle("Space Invader");
@@ -13,6 +14,7 @@ public class Game extends JFrame implements Common{
         setVisible(true);
     }
     public static void main(String[] args){
+        //Game entrance point
         Game game = new Game();
     }
 }

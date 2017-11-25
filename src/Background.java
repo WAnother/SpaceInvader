@@ -9,6 +9,7 @@ public class Background extends JPanel implements Common{
         initBackground();
     }
     private void initBackground(){
+        //Load background image
         loadImage();
         setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
     }

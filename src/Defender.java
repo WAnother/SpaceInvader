@@ -10,6 +10,7 @@ public class Defender extends Sprite{
         initDefender();
     }
     private void initDefender(){
+        //Load the defender image and set coordinates
         setXcor(start_x);
         setYcor(start_y);
         loadImage(path);

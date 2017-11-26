@@ -29,12 +29,12 @@ public class Defender extends Sprite{
     public void move(){
         //Defender's action
         x_cor += move_x;
-        y_cor += move_y;
+      //  y_cor += move_y;
         if(x_cor < 1){
             x_cor = 1;
         }
-        if(x_cor > 1200){
-            x_cor = 1200;
+        if(x_cor > 1300){
+            x_cor = 1300;
         }
     }
     public void keyPressed(KeyEvent e){

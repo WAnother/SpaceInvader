@@ -18,6 +18,7 @@ public class Background extends JPanel implements Common{
         image = icon.getImage();
     }
     public Image getImage(){
+        //get the image
         return image;
     }
 }

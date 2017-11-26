@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Game extends JFrame implements Common{
     public Game() {
@@ -14,6 +15,11 @@ public class Game extends JFrame implements Common{
     }
     public static void main(String[] args){
         //Game entry point
-        Game game = new Game();
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Game game = new Game();
+            }
+        });
     }
 }

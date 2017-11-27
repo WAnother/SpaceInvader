@@ -6,7 +6,8 @@ public class Defender extends Sprite{
     private int start_x = 600;
     private int start_y = 700;
     private ArrayList<Bullet> bullets;
-
+    private boolean released = false;
+    public int shoot_count;
     public Defender(){
         //Initial defender
         initDefender();
@@ -19,6 +20,7 @@ public class Defender extends Sprite{
         loadImage(path);
         resizeImage(1);
         setImageDimension(1);
+        shoot_count = 0;
         bullets = new ArrayList<Bullet>();
 
     }
@@ -47,20 +49,27 @@ public class Defender extends Sprite{
             move_x = -2;
         }
         if(key == KeyEvent.VK_UP){
-            shoot();
+            if(!released) {
+                if(bullets.size() <= 2) {
+                    shoot();
+                }
+            }
         }
+        released = true;
     }
     public void keyReleased(KeyEvent e){
         //if key is released then stop moving
         int key = e.getKeyCode();
+        released = true;
         if(key == KeyEvent.VK_RIGHT){
             move_x = 0;
         }
         if(key == KeyEvent.VK_LEFT){
             move_x = 0;
         }
+        released = false;
     }
-    private void shoot(){
+    public void shoot(){
         //add bullet to bullet list
         bullets.add(new Bullet(x_cor + 60, y_cor));
     }

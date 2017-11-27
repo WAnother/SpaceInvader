@@ -19,6 +19,7 @@ public class Board extends JPanel implements Common, ActionListener{
     private int total_enemy;
     private int move;
     private int move_down;
+    private int count;
     public Board(){
         //initial board
         initBoard();
@@ -27,7 +28,7 @@ public class Board extends JPanel implements Common, ActionListener{
         //Initial the background image
         background = new Background();
         //Add Keylistener
-        KeyListener k1 = new KeyListener() {
+       KeyListener k1 = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
 
@@ -46,27 +47,6 @@ public class Board extends JPanel implements Common, ActionListener{
         initGame();
         setDoubleBuffered(true);
     }
-  /*  public void run(){
-        defenderAction();
-        bulletAction();
-        checkCollision();
-        invaderAction();
-        bombAction();
-        repaint();
-    }*/
- /*   @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        defender.keyPressed(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        defender.keyReleased(e);
-    }
-*/
     private void initGame(){
         //Initial the objects and start the game
         in_progress = true;
@@ -80,12 +60,13 @@ public class Board extends JPanel implements Common, ActionListener{
         initInvader();
         initBarrier();
         total_enemy = invaders.size();
+        count = 0;
     }
     private void initInvader(){
         invaders = new ArrayList<Invader>();
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 4; i++){
             for(int j = 0; j < 5; j++){
-                Invader invader = new Invader(Invader_Xcor + i * 200, Invader_Ycor + j * 50);
+                Invader invader = new Invader(Invader_Xcor + i * 220, Invader_Ycor + j * 70);
                 invaders.add(invader);
             }
         }
@@ -209,6 +190,8 @@ public class Board extends JPanel implements Common, ActionListener{
     }
     public void actionPerformed(ActionEvent e){
         //Update the movement
+        count++;
+        defender.shoot_count++;
         defenderAction();
         bulletAction();
         checkCollision();
@@ -244,27 +227,29 @@ public class Board extends JPanel implements Common, ActionListener{
         }
 
         //Drop bombs
-        Random random = new Random();
-        int position = random.nextInt(invaders.size());
-        Invader invader = invaders.get(position);
-        if(invader.checkVisible()) {
-            if (invader.getCondition()) {
-                invader.shoot();
-            } else {
-                int x_cor = invader.getXcor();
-                int y_cor = invader.getYcor();
-                for (Invader temp_invader : invaders) {
-                    if (temp_invader != invader && temp_invader.checkVisible()) {
-                        if ((x_cor == temp_invader.getXcor()) && (y_cor < temp_invader.getYcor())) {
-                            invader.setConditionToFalse();
-                            break;
-                        } else {
-                            invader.setConditionToTrue();
-                        }
-                    }
-                }
+        if(count % 10 == 0) {
+            Random random = new Random();
+            int position = random.nextInt(invaders.size());
+            Invader invader = invaders.get(position);
+            if (invader.checkVisible()) {
                 if (invader.getCondition()) {
                     invader.shoot();
+                } else {
+                    int x_cor = invader.getXcor();
+                    int y_cor = invader.getYcor();
+                    for (Invader temp_invader : invaders) {
+                        if (temp_invader != invader && temp_invader.checkVisible()) {
+                            if ((x_cor == temp_invader.getXcor()) && (y_cor < temp_invader.getYcor())) {
+                                invader.setConditionToFalse();
+                                break;
+                            } else {
+                                invader.setConditionToTrue();
+                            }
+                        }
+                    }
+                    if (invader.getCondition()) {
+                        invader.shoot();
+                    }
                 }
             }
         }
@@ -272,7 +257,7 @@ public class Board extends JPanel implements Common, ActionListener{
     }
     private void defenderAction(){
         //update the defender's movement
-        defender.move();
+            defender.move();
     }
     private void bulletAction(){
         //update the bullet's movement
@@ -396,5 +381,4 @@ public class Board extends JPanel implements Common, ActionListener{
             }
         }
     }
-
 }

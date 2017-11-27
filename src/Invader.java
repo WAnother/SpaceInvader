@@ -68,9 +68,9 @@ public class Invader extends Sprite implements Common{
     }
     public void shoot(){
         //add bomb to bomb list
-        if(bombs.size() == 0) {
+        //if(bombs.size() == 0) {
             bombs.add(new Bomb(x_cor + 60, y_cor + 80));
-        }
+        //}
     }
     public boolean getCondition(){
         return condition;

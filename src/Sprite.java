@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Sprite implements Common{
-    private Image image;
+    protected Image image;
     protected int x_cor;
     protected int y_cor;
     protected int move_x;

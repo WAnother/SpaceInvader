@@ -57,6 +57,7 @@ public class Board extends JPanel implements Common, ActionListener{
         timer = new Timer(10, this);
         timer.start();
         defender = new Defender();
+       // Thread t1 = new Thread initInvader();
         initInvader();
         initBarrier();
         total_enemy = invaders.size();
@@ -78,10 +79,7 @@ public class Board extends JPanel implements Common, ActionListener{
             barriers.add(barrier);
         }
     }
-    private void drawBackground(Graphics g){
-        //Draw the background
-        g.drawImage(background.getImage(),0,0,null );
-    }
+
     private void drawDefender(Graphics g){
         //Draw the defender
         if(defender.visible) {
@@ -142,6 +140,10 @@ public class Board extends JPanel implements Common, ActionListener{
                 }
             }
         }
+    }
+    private void drawBackground(Graphics g){
+        //Draw the background
+        g.drawImage(background.getImage(),0,0,null );
     }
     private void drawScore(Graphics g){
         //draw the score
@@ -247,7 +249,7 @@ public class Board extends JPanel implements Common, ActionListener{
                             }
                         }
                     }
-                    if (invader.getCondition()) {
+                    if (invader.getCondition() || invaders.size() == 1) {
                         invader.shoot();
                     }
                 }
@@ -381,4 +383,16 @@ public class Board extends JPanel implements Common, ActionListener{
             }
         }
     }
+  /*  @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        defender.keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        defender.keyReleased(e);
+    }*/
 }

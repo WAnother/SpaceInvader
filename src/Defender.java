@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Defender extends Sprite{
     private String path = "res//image//Defender.png";
     private int start_x = 600;
-    private int start_y = 650;
+    private int start_y = 700;
     private ArrayList<Bullet> bullets;
 
     public Defender(){
@@ -62,7 +62,7 @@ public class Defender extends Sprite{
     }
     private void shoot(){
         //add bullet to bullet list
-        bullets.add(new Bullet(x_cor + 50, y_cor));
+        bullets.add(new Bullet(x_cor + 60, y_cor));
     }
 
 }

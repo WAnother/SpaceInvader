@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Sprite {
+public class Sprite implements Common{
     private Image image;
     protected int x_cor;
     protected int y_cor;
@@ -54,8 +54,12 @@ public class Sprite {
                 image_height = 150;
                 break;
             case 2:
-                image_width = 50;
-                image_height = 50;
+                image_width = 30;
+                image_height = 30;
+                break;
+            case 3:
+                image_width = Box_Width;
+                image_height = Box_Height;
                 break;
         }
     }
@@ -74,7 +78,7 @@ public class Sprite {
         switch(x) {
             case 1: image = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
             break;
-            case 2: image = image.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+            case 2: image = image.getScaledInstance(30, 30, Image.SCALE_DEFAULT);
             break;
         }
     }

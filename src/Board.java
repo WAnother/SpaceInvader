@@ -1,25 +1,24 @@
-import com.sun.javafx.font.FontFactory;
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.event.*;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
 
 public class Board extends JPanel implements Common, ActionListener{
     private Background background;
     private Defender defender;
     private ArrayList<Invader> invaders;
+    private ArrayList<Barrier> barriers;
     private boolean in_progress;
     private boolean in_menu;
     private Timer timer;
     private int score;
+    private int lives;
     private String game_message;
     private int total_enemy;
-    private Thread animation;
     private int move;
+    private int move_down;
     public Board(){
         //initial board
         initBoard();
@@ -42,29 +41,60 @@ public class Board extends JPanel implements Common, ActionListener{
                     defender.keyReleased(e);
             }
         };
-        addKeyListener(k1);
+        this.addKeyListener(k1);
         setFocusable(true);
         initGame();
         setDoubleBuffered(true);
     }
+  /*  public void run(){
+        defenderAction();
+        bulletAction();
+        checkCollision();
+        invaderAction();
+        bombAction();
+        repaint();
+    }*/
+ /*   @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        defender.keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        defender.keyReleased(e);
+    }
+*/
     private void initGame(){
         //Initial the objects and start the game
         in_progress = true;
         score = 0;
         move = 1;
+        move_down = 0;
+        lives = 2;
         timer = new Timer(10, this);
         timer.start();
         defender = new Defender();
         initInvader();
+        initBarrier();
         total_enemy = invaders.size();
     }
     private void initInvader(){
         invaders = new ArrayList<Invader>();
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++){
-                Invader invader = new Invader(Invader_Xcor + i * 200, Common.Invader_Ycor + j * 50);
+                Invader invader = new Invader(Invader_Xcor + i * 200, Invader_Ycor + j * 50);
                 invaders.add(invader);
             }
+        }
+    }
+    private void initBarrier(){
+        barriers = new ArrayList<Barrier>();
+        for(int i = 0; i < 3; i++){
+            Barrier barrier = new Barrier(Barrier_Xcor + i * 450, Barrier_Ycor);
+            barriers.add(barrier);
         }
     }
     private void drawBackground(Graphics g){
@@ -117,7 +147,23 @@ public class Board extends JPanel implements Common, ActionListener{
             }
         }
     }
+    private void drawBarrier(Graphics g){
+        for(Barrier barrier:barriers){
+            Iterator iterator = barrier.getBoxes().iterator();
+            while(iterator.hasNext()){
+                Box box = (Box) iterator.next();
+                if(box.checkVisible()){
+                    g.setColor(Color.blue);
+                    g.fillRect(box.getXcor(),box.getYcor(),box.getWidth(),box.getHeight());
+                }
+                else{
+                    iterator.remove();
+                }
+            }
+        }
+    }
     private void drawScore(Graphics g){
+        //draw the score
         g.setColor(Color.blue);
         g.fillRect(1350,0,100,50);
         g.setColor(Color.WHITE);
@@ -125,6 +171,8 @@ public class Board extends JPanel implements Common, ActionListener{
         g.setFont(font);
         g.drawString("Score: ", 1360, 25);
         g.drawString(String.valueOf(score), 1410, 25);
+        g.drawString("Lives: ", 1360, 45);
+        g.drawString(String.valueOf(lives), 1410, 45);
     }
     private void drawInGame(Graphics g){
         //repaint when game is in progress
@@ -134,8 +182,10 @@ public class Board extends JPanel implements Common, ActionListener{
         drawInvader(g);
         drawBomb(g);
         drawScore(g);
+        drawBarrier(g);
     }
     private void drawMessage(Graphics g){
+        //draw the message at the end of the game
         Font font = new Font("TimesRoman", Font.BOLD, 30);
         g.setFont(font);
         g.setColor(Color.YELLOW);
@@ -171,11 +221,12 @@ public class Board extends JPanel implements Common, ActionListener{
         //Movements
         for(Invader invader:invaders){
             if(invader.checkVisible()) {
+                move_down = 0;
                 if (invader.checkLeftBound()) {
                     move = 1;
+                    move_down = 1;
                     break;
                 } else if (invader.checkRightBound()) {
-                  //  invader.setMove_status(-1);
                     move = -1;
                     break;
                 }
@@ -184,11 +235,14 @@ public class Board extends JPanel implements Common, ActionListener{
         for(Invader invader:invaders){
             if(invader.checkVisible()){
                 invader.setMove_status(move);
+                invader.setMove_down(move_down);
             }
         }
         for(Invader invader:invaders){
             invader.move();
+            invader.setMove_down(0);
         }
+
         //Drop bombs
         Random random = new Random();
         int position = random.nextInt(invaders.size());
@@ -240,25 +294,40 @@ public class Board extends JPanel implements Common, ActionListener{
 
     }
     private void checkCollision(){
-        //Check if bullet hits enemy
         ArrayList<Bullet> bullets = defender.getBullet();
         for(Bullet bullet:bullets){
-            int bullet_x = bullet.getXcor();
-            int bullet_y = bullet.getYcor();
-            for(Invader invader:invaders){
-                //if a invader is killed, ignore that one and move on
-                if(invader.checkVisible()) {
-                    int invader_x = invader.getXcor();
-                    int invader_y = invader.getYcor();
-                    if ((bullet_x >= invader_x) && (bullet_x <= invader_x + invader.getWidth() - 50) && (bullet_y >= invader_y) && (bullet_y <= invader_y + invader.getHeight() - 50)) {
-                        bullet.die();
-                        invader.die();
-                        score++;
-                        if(score == total_enemy){
-                            in_progress = false;
-                            game_message = "Game over, you win!!!";
+            if(bullet.checkVisible()) {
+                int bullet_x = bullet.getXcor();
+                int bullet_y = bullet.getYcor();
+                //Check if bullet hits barrier
+                for (Barrier barrier : barriers) {
+                    ArrayList<Box> boxes = barrier.getBoxes();
+                    for (Box box : boxes) {
+                        if (box.checkVisible()) {
+                            if ((bullet_x + bullet.getWidth() >= box.getXcor()) && (bullet_x <= box.getXcor() + box.getWidth()) && (bullet_y + bullet.getHeight() >= box.getYcor()) && (bullet_y <= box.getYcor() + box.getHeight())){
+                                bullet.die();
+                                break;
+                            }
                         }
-                        break;
+                    }
+                }
+                //Check if the bullet hits invader
+                if(bullet.checkVisible()) {
+                    for (Invader invader : invaders) {
+                        if (invader.checkVisible()) {
+                            int invader_x = invader.getXcor();
+                            int invader_y = invader.getYcor();
+                            if ((bullet_x >= invader_x) && (bullet_x <= invader_x + invader.getWidth() - 50) && (bullet_y >= invader_y) && (bullet_y <= invader_y + invader.getHeight() - 50)) {
+                                bullet.die();
+                                invader.die();
+                                score++;
+                                if (score == total_enemy) {
+                                    in_progress = false;
+                                    game_message = "Game over, you win!!!";
+                                }
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -267,17 +336,65 @@ public class Board extends JPanel implements Common, ActionListener{
         for(Invader invader: invaders){
             ArrayList<Bomb> bombs = invader.getBomb();
             for(Bomb bomb:bombs){
-                int bomb_x = bomb.getXcor();
-                int bomb_y = bomb.getYcor();
-                if((bomb_x >= defender.getXcor()) && (bomb_x <= defender.getXcor() + defender.getWidth() - 50) && (bomb_y >= defender.getYcor()) && (bomb_y <= defender.getYcor() + defender.getHeight() - 70)){
-                    bomb.die();
-                    defender.die();
-                    in_progress = false;
-                    game_message = "Game over, you lose!!!";
+                if(bomb.checkVisible()) {
+                    int bomb_x = bomb.getXcor();
+                    int bomb_y = bomb.getYcor();
+                    //Check if bomb hits barriers
+                    for (Barrier barrier : barriers) {
+                        ArrayList<Box> boxes = barrier.getBoxes();
+                        for (Box box : boxes) {
+                            if(box.checkVisible()) {
+                                if ((bomb_x + bomb.getWidth() >= box.getXcor()) && (bomb_x <= box.getXcor() + box.getWidth()) && (bomb_y + bomb.getHeight() >= box.getYcor()) && (bomb_y + bomb.getHeight() <= box.getYcor() + box.getHeight())) {
+                                    bomb.die();
+                                    box.die();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    //Check if bomb hits player
+                    if(bomb.checkVisible()) {
+                        if ((bomb_x >= defender.getXcor()) && (bomb_x <= defender.getXcor() + defender.getWidth() - 50) && (bomb_y >= defender.getYcor()) && (bomb_y <= defender.getYcor() + defender.getHeight() - 70)) {
+                            bomb.die();
+                            defender.die();
+                            lives--;
+                            if(lives == -1) {
+                                in_progress = false;
+                                game_message = "Game over, you lose!!!";
+                            }
+                            else{
+                                defender = new Defender();
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
-
+        //Check if invader hits defender
+        for(Invader invader: invaders){
+            if(invader.checkVisible()) {
+                int invader_x = invader.getXcor();
+                int invader_y = invader.getYcor();
+                if(invader_y >= 700){
+                    in_progress = false;
+                    game_message = "Game over, you lose!!!";
+                    break;
+                }
+                if ((invader_x + invader.getWidth()  >= defender.getXcor() + 50) && (invader_x <= defender.getXcor() + defender.getWidth()) && (invader_y + invader.getHeight()  >= defender.getYcor() + 100) && (invader_y <= defender.getYcor() + defender.getHeight())) {
+                    defender.die();
+                    lives--;
+                    if(lives == -1) {
+                        in_progress = false;
+                        game_message = "Game over, you lose!!!";
+                    }
+                    else{
+                        defender = new Defender();
+                    }
+                    break;
+                }
+            }
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Board extends JPanel implements Common, ActionListener{
     private Background background;
-    private Defender defender;
+    public Defender defender;
     private ArrayList<Invader> invaders;
     private ArrayList<Barrier> barriers;
     private boolean in_progress;
@@ -20,11 +20,28 @@ public class Board extends JPanel implements Common, ActionListener{
     private int move;
     private int move_down;
     private int count;
-    public Board(){
+    private int bomb_speed;
+    public Board(int row, int column, int move_h, int move_v, int fire_speed, int number_lives){
         //initial board
-        initBoard();
+        //Add componentlistener
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {}
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                Board.this.requestFocusInWindow();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
+        initBoard(row, column,move_h,move_v,fire_speed,number_lives);
     }
-    private void initBoard(){
+    private void initBoard(int row, int column, int move_h, int move_v, int fire_speed, int number_lives){
         //Initial the background image
         background = new Background();
         //Add Keylistener
@@ -44,33 +61,74 @@ public class Board extends JPanel implements Common, ActionListener{
         };
         this.addKeyListener(k1);
         setFocusable(true);
-        initGame();
+        initGame(row, column,move_h,move_v,fire_speed,number_lives);
         setDoubleBuffered(true);
     }
-    private void initGame(){
+    private void initGame(int row, int column, int move_h, int move_v, int fire_speed, int number_lives){
         //Initial the objects and start the game
+        defender = new Defender();
+        initInvader(row, column,move_h, move_v);
+        initBarrier();
+        total_enemy = invaders.size();
+        count = 0;
         in_progress = true;
         score = 0;
         move = 1;
         move_down = 0;
-        lives = 2;
+        bomb_speed = setBombSpeed(fire_speed);
+        lives = number_lives - 1;
         timer = new Timer(10, this);
         timer.start();
-        defender = new Defender();
-       // Thread t1 = new Thread initInvader();
-        initInvader();
-        initBarrier();
-        total_enemy = invaders.size();
-        count = 0;
     }
-    private void initInvader(){
+    private void initInvader(int row, int column,int move_h, int move_v){
         invaders = new ArrayList<Invader>();
-        for(int i = 0; i < 4; i++){
-            for(int j = 0; j < 5; j++){
-                Invader invader = new Invader(Invader_Xcor + i * 220, Invader_Ycor + j * 70);
+        int H_Space = chooseHspace(column);
+        int V_Space = chooseVspace(row);
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < column; j++){
+                Invader invader = new Invader(Invader_Xcor + j * H_Space, Invader_Ycor + i * V_Space, move_h, move_v);
                 invaders.add(invader);
             }
         }
+    }
+    private int setBombSpeed(int i){
+        int bomb_speed = 0;
+        if(i == 1){
+            bomb_speed = Bullet_Speed3;
+        }
+        else if(i == 2){
+            bomb_speed = Bullet_Speed2;
+        }
+        else if(i == 3){
+            bomb_speed = Bullet_Speed;
+        }
+        return bomb_speed;
+    }
+    private int chooseHspace(int i){
+        int Hspace = 0;
+        if(i == 4){
+            Hspace = Invader_HSpace_4;
+        }
+        else if(i == 5){
+            Hspace = Invader_HSpace_5;
+        }
+        else if(i == 6){
+            Hspace = Invader_HSpace_6;
+        }
+        return Hspace;
+    }
+    private int chooseVspace(int i){
+        int Vspace = 0;
+        if(i == 4){
+            Vspace = Invader_VSpace_4;
+        }
+        else if(i == 5){
+            Vspace = Invader_VSpace_5;
+        }
+        else if(i == 6){
+            Vspace = Invader_VSpace_6;
+        }
+        return Vspace;
     }
     private void initBarrier(){
         barriers = new ArrayList<Barrier>();
@@ -79,7 +137,6 @@ public class Board extends JPanel implements Common, ActionListener{
             barriers.add(barrier);
         }
     }
-
     private void drawDefender(Graphics g){
         //Draw the defender
         if(defender.visible) {
@@ -229,7 +286,7 @@ public class Board extends JPanel implements Common, ActionListener{
         }
 
         //Drop bombs
-        if(count % 10 == 0) {
+        if(count % bomb_speed == 0) {
             Random random = new Random();
             int position = random.nextInt(invaders.size());
             Invader invader = invaders.get(position);
@@ -383,16 +440,4 @@ public class Board extends JPanel implements Common, ActionListener{
             }
         }
     }
-  /*  @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        defender.keyPressed(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        defender.keyReleased(e);
-    }*/
 }

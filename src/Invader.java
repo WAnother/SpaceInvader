@@ -7,12 +7,13 @@ public class Invader extends Sprite implements Common{
     private int move_status;
     private int move_down;
     private int move_y_up;
-    public Invader(int x, int y){
+    private int Hspeed, UVspeed, DVspeed;
+    public Invader(int x, int y,int hspeed, int vspeed){
         //initial invader
         super(x,y);
-        initInvader();
+        initInvader(hspeed,vspeed);
     }
-    private void initInvader(){
+    private void initInvader(int hspeed, int vspeed){
         visible = true;
         condition = false;
         move_status = 1;
@@ -20,22 +21,46 @@ public class Invader extends Sprite implements Common{
         loadImage(path);
         resizeImage(1);
         setImageDimension(1);
+        setSpeed(hspeed, vspeed);
         bombs = new ArrayList<Bomb>();
     }
     public ArrayList<Bomb> getBomb(){
         //get the bomb arraylist
         return bombs;
     }
+    private void setSpeed(int hspeed, int vspeed){
+        if(hspeed == 1){
+            Hspeed = Invader_Speed1;
+        }
+        else if(hspeed == 2){
+            Hspeed = Invader_Speed2;
+        }
+        else if(hspeed == 3){
+            Hspeed = Invader_Speed3;
+        }
+        if(vspeed == 1){
+            DVspeed = Invader_DSpeed1;
+            UVspeed = Invader_USpeed1;
+        }
+        if(vspeed == 2){
+            DVspeed = Invader_DSpeed2;
+            UVspeed = Invader_USpeed2;
+        }
+        if(vspeed == 3){
+            DVspeed = Invader_DSpeed3;
+            UVspeed = Invader_USpeed3;
+        }
+    }
     public void move(){
         if(move_status == 1){
-            move_x = Invader_Speed;
+            move_x = Hspeed;
         }
         else{
-            move_x = -Invader_Speed;
+            move_x = -Hspeed;
         }
         if(move_down == 1){
-            move_y = Invader_DSpeed;
-            move_y_up = Invader_USpeed;
+            move_y = DVspeed;
+            move_y_up = UVspeed;
         }
         else{
             move_y = 0;

@@ -13,7 +13,7 @@ public class Bullet extends Sprite implements Common{
     }
     public void move(){
         //update the bullet position
-        y_cor -= Bullet_Speed;
+        y_cor -= Bullet_Fire_Speed;
         if(y_cor <= 1){
             visible = false;
         }

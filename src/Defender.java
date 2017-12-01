@@ -48,9 +48,9 @@ public class Defender extends Sprite{
         if(key == KeyEvent.VK_LEFT){
             move_x = -2;
         }
-        if(key == KeyEvent.VK_UP){
+        if(key == KeyEvent.VK_SPACE){
             if(!released) {
-                if(bullets.size() <= 2) {
+                if(bullets.size() == 0) {
                     shoot();
                 }
             }
@@ -71,7 +71,11 @@ public class Defender extends Sprite{
     }
     public void shoot(){
         //add bullet to bullet list
+       // if(bullets.size() == 0) {
+        ActionMusic actionMusic = new ActionMusic(3);
+        actionMusic.play();
         bullets.add(new Bullet(x_cor + 60, y_cor));
+        //}
     }
 
 }

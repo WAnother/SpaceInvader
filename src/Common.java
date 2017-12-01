@@ -4,6 +4,8 @@ public interface Common {
     public static final int Bullet_Speed = 5;
     public static final int Bullet_Speed2 = 15;
     public static final int Bullet_Speed3 = 25;
+    public static final int Bomb_Drop_Speed = 2;
+    public static final int Bullet_Fire_Speed = 6;
     public static final int Invader_Speed1 = 1;
     public static final int Invader_DSpeed1 = 10;
     public static final int Invader_USpeed1 = 5;

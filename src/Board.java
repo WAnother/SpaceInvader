@@ -292,6 +292,8 @@ public class Board extends JPanel implements Common, ActionListener{
             Invader invader = invaders.get(position);
             if (invader.checkVisible()) {
                 if (invader.getCondition()) {
+                    ActionMusic actionMusic = new ActionMusic(1);
+                    actionMusic.play();
                     invader.shoot();
                 } else {
                     int x_cor = invader.getXcor();
@@ -307,6 +309,8 @@ public class Board extends JPanel implements Common, ActionListener{
                         }
                     }
                     if (invader.getCondition() || invaders.size() == 1) {
+                        ActionMusic actionMusic = new ActionMusic(1);
+                        actionMusic.play();
                         invader.shoot();
                     }
                 }
@@ -363,6 +367,8 @@ public class Board extends JPanel implements Common, ActionListener{
                             int invader_y = invader.getYcor();
                             if ((bullet_x >= invader_x) && (bullet_x <= invader_x + invader.getWidth() - 50) && (bullet_y >= invader_y) && (bullet_y <= invader_y + invader.getHeight() - 50)) {
                                 bullet.die();
+                                ActionMusic actionMusic = new ActionMusic(2);
+                                actionMusic.play();
                                 invader.die();
                                 score++;
                                 if (score == total_enemy) {
@@ -376,7 +382,7 @@ public class Board extends JPanel implements Common, ActionListener{
                 }
             }
         }
-        //Check if bomb hits player
+        //Check if bomb hits barrier
         for(Invader invader: invaders){
             ArrayList<Bomb> bombs = invader.getBomb();
             for(Bomb bomb:bombs){
@@ -399,7 +405,11 @@ public class Board extends JPanel implements Common, ActionListener{
                     //Check if bomb hits player
                     if(bomb.checkVisible()) {
                         if ((bomb_x >= defender.getXcor()) && (bomb_x <= defender.getXcor() + defender.getWidth() - 50) && (bomb_y >= defender.getYcor()) && (bomb_y <= defender.getYcor() + defender.getHeight() - 70)) {
+                            ActionMusic actionMusic = new ActionMusic(0);
+                            actionMusic.play();
                             bomb.die();
+                            /*Music music = new Music(1);
+                            music.play();*/
                             defender.die();
                             lives--;
                             if(lives == -1) {

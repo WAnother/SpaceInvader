@@ -1,22 +1,7 @@
-import sun.audio.AudioData;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import sun.audio.ContinuousAudioDataStream;
-
 import javax.swing.*;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class Game extends JFrame implements Common{
     private Board board;
@@ -30,8 +15,6 @@ public class Game extends JFrame implements Common{
     private void initGame(){
         //Create a new frame
         start = false;
-        //board = new Board();
-        //String path = "res//music//Radioactive.mp3";
         menu = new Menu();
         screen = new JPanel(new CardLayout());
         JButton jButton = new JButton("Enter");
@@ -53,7 +36,6 @@ public class Game extends JFrame implements Common{
         jButton.addActionListener(actionListener);
         menu.add(jButton);
         screen.add(menu, "Menu Screen");
-       // screen.add(board, "Game Screen");
         cardLayout= (CardLayout)screen.getLayout();
         cardLayout.show(screen,"Menu Screen");
         add(screen);
@@ -62,18 +44,8 @@ public class Game extends JFrame implements Common{
         setTitle("Space Invader");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        music();
-        //setFocusable(true);
-    }
-    public void music(){
-        try{
-            URL url;
-            File file = new File("res//music//bgmusic.wav");
-            url = file.toURI().toURL();
-            AudioClip audioClip;
-            audioClip = Applet.newAudioClip(url);
-            audioClip.loop();
-        }catch (Exception e){}
+        BackgroundMusic backgroundMusic = new BackgroundMusic();
+        backgroundMusic.play();
     }
     public static void main(String[] args){
         //Game entry point
@@ -81,7 +53,6 @@ public class Game extends JFrame implements Common{
             @Override
             public void run() {
                 Game game = new Game();
-               // game.music();
            }
         });
     }

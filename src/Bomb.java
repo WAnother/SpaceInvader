@@ -13,7 +13,7 @@ public class Bomb extends Sprite implements Common{
     }
     public void move(){
         //update the bullet position
-        y_cor += Bullet_Speed;
+        y_cor += Bomb_Drop_Speed;
         if(y_cor >= 900){
             visible = false;
         }

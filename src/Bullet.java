@@ -1,3 +1,4 @@
+//class for the bullet from defender
 public class Bullet extends Sprite implements Common{
     private String path = "res//image//Defender_Missile.png";
     public Bullet(int x, int y){

@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//class for the invader
 public class Invader extends Sprite implements Common{
     private String path = "res//image//Invader.png";
     private ArrayList<Bomb> bombs;
@@ -22,6 +22,7 @@ public class Invader extends Sprite implements Common{
         resizeImage(1);
         setImageDimension(1);
         setSpeed(hspeed, vspeed);
+        //initialize bomb for invader
         bombs = new ArrayList<Bomb>();
     }
     public ArrayList<Bomb> getBomb(){
@@ -29,6 +30,7 @@ public class Invader extends Sprite implements Common{
         return bombs;
     }
     private void setSpeed(int hspeed, int vspeed){
+        //set invader's moving speed(horizontal and vertical)
         if(hspeed == 1){
             Hspeed = Invader_Speed1;
         }
@@ -52,6 +54,7 @@ public class Invader extends Sprite implements Common{
         }
     }
     public void move(){
+        //update the movement
         if(move_status == 1){
             move_x = Hspeed;
         }
@@ -71,6 +74,7 @@ public class Invader extends Sprite implements Common{
         y_cor += move_y_up;
     }
     public boolean checkLeftBound(){
+        //check if invader hits the left bound
         if(x_cor <= 10){
             return true;
         }
@@ -79,6 +83,7 @@ public class Invader extends Sprite implements Common{
         }
     }
     public boolean checkRightBound() {
+        //check if invader hits the right bound
         if (x_cor >= 1200) {
             return true;
         } else {
@@ -86,16 +91,16 @@ public class Invader extends Sprite implements Common{
         }
     }
     public void setMove_status(int x){
+        //determine if invader should move left or right
         move_status = x;
     }
-    public void setMove_down(int x){
+    public void setMove_down(int x)
+    {   //determine if invader should move down
         move_down = x;
     }
     public void shoot(){
         //add bomb to bomb list
-        //if(bombs.size() == 0) {
-            bombs.add(new Bomb(x_cor + 60, y_cor + 80));
-        //}
+        bombs.add(new Bomb(x_cor + 60, y_cor + 80));
     }
     public boolean getCondition(){
         return condition;

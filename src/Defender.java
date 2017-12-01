@@ -1,6 +1,6 @@
- import java.awt.event.KeyEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
+//class for the defender
 public class Defender extends Sprite{
     private String path = "res//image//Defender.png";
     private int start_x = 600;
@@ -31,7 +31,6 @@ public class Defender extends Sprite{
     public void move(){
         //Defender's action
         x_cor += move_x;
-      //  y_cor += move_y;
         if(x_cor < 1){
             x_cor = 1;
         }
@@ -49,6 +48,7 @@ public class Defender extends Sprite{
             move_x = -2;
         }
         if(key == KeyEvent.VK_SPACE){
+            //if key is released earlier, then shoot, otherwise wait
             if(!released) {
                 if(bullets.size() == 0) {
                     shoot();
@@ -70,12 +70,9 @@ public class Defender extends Sprite{
         released = false;
     }
     public void shoot(){
-        //add bullet to bullet list
-       // if(bullets.size() == 0) {
+        //play music when shoot bullet
         ActionMusic actionMusic = new ActionMusic(3);
         actionMusic.play();
         bullets.add(new Bullet(x_cor + 60, y_cor));
-        //}
     }
-
 }

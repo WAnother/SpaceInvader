@@ -1,7 +1,7 @@
 import java.io.*;
 import java.applet.*;
 import java.net.*;
-
+//class for action's music
 public class ActionMusic {
     private String path;
     private URL url;
@@ -11,6 +11,7 @@ public class ActionMusic {
         selection = x;
     }
     public void play(){
+        //choose file name based on given action
         switch (selection){
             case 0: path = new String("res//music//explosion.wav");
                     break;
@@ -24,6 +25,7 @@ public class ActionMusic {
         playSound();
     }
     private void playSound(){
+        //play music
         File file = new File(path);
         try {
             url = file.toURI().toURL();
@@ -32,6 +34,5 @@ public class ActionMusic {
         }
         audioClip = Applet.newAudioClip(url);
         audioClip.play();
-     //   audioClip.loop();
     }
 }

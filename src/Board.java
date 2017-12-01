@@ -44,7 +44,7 @@ public class Board extends JPanel implements Common, ActionListener{
     private void initBoard(int row, int column, int move_h, int move_v, int fire_speed, int number_lives){
         //Initial the background image
         background = new Background();
-        //Add Keylistener
+        //Add Keylistener for keyboard input
        KeyListener k1 = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -81,6 +81,7 @@ public class Board extends JPanel implements Common, ActionListener{
         timer.start();
     }
     private void initInvader(int row, int column,int move_h, int move_v){
+        //initialize the invaders
         invaders = new ArrayList<Invader>();
         int H_Space = chooseHspace(column);
         int V_Space = chooseVspace(row);
@@ -92,6 +93,7 @@ public class Board extends JPanel implements Common, ActionListener{
         }
     }
     private int setBombSpeed(int i){
+        //set the drop bomb speed from invader
         int bomb_speed = 0;
         if(i == 1){
             bomb_speed = Bullet_Speed3;
@@ -105,6 +107,7 @@ public class Board extends JPanel implements Common, ActionListener{
         return bomb_speed;
     }
     private int chooseHspace(int i){
+        //set the space between invader based on the number of enemy
         int Hspace = 0;
         if(i == 4){
             Hspace = Invader_HSpace_4;
@@ -118,6 +121,7 @@ public class Board extends JPanel implements Common, ActionListener{
         return Hspace;
     }
     private int chooseVspace(int i){
+        //set the space between invader based on the number of enemy
         int Vspace = 0;
         if(i == 4){
             Vspace = Invader_VSpace_4;
@@ -131,6 +135,7 @@ public class Board extends JPanel implements Common, ActionListener{
         return Vspace;
     }
     private void initBarrier(){
+        //initialize the barrier
         barriers = new ArrayList<Barrier>();
         for(int i = 0; i < 3; i++){
             Barrier barrier = new Barrier(Barrier_Xcor + i * 450, Barrier_Ycor);

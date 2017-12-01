@@ -1,11 +1,12 @@
+//class for the bomb from invader
 public class Bomb extends Sprite implements Common{
     private String path = "res//image//Invader_Bomb.png";
     public Bomb(int x, int y){
         super(x,y);
-        //Initial Bullet
-        initBullet();
+        //Initial Bul
+        initBomb();
     }
-    public void initBullet(){
+    private void initBomb(){
         visible = true;
         loadImage(path);
         resizeImage(2);

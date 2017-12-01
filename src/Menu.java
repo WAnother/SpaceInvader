@@ -2,12 +2,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+//starting menu for the game
 public class Menu extends JPanel implements ActionListener {
     private Background background;
     private ArrayList<JButton> jButtons;
     private ArrayList<JLabel> jLabels;
-    // private JLabel jLabel;
     private String path = "res//image//Defender_Missile.png";
     private boolean start;
     private int row, column, move_h, move_v, fire_speed, number_lives;
@@ -25,6 +24,7 @@ public class Menu extends JPanel implements ActionListener {
         locateInterface();
     }
     private void locateInterface() {
+        //draw the jlabel and jbutton to the panel
         int count = 0;
         for (int i = 0; i < 6; i++) {
             JLabel jLabel = jLabels.get(i);
@@ -37,6 +37,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
     private void initjLabel() {
+        //initialize jlabels for user choice
         for (int i = 0; i < 6; i++) {
             JLabel jLabel = null;
             if (i == 0) {
@@ -63,6 +64,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
     private void initjButton() {
+        //initialize jbuttons for user choice
         for (int i = 0; i < 18; i++) {
             JButton jButton = null;
             if (i < 3) {
@@ -94,6 +96,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
     private String diffSel(int x) {
+        //determine the text on the jbutton
         String message = null;
         switch (x % 3) {
             case 0:
@@ -113,6 +116,7 @@ public class Menu extends JPanel implements ActionListener {
         g.drawImage(background.getImage(), 0, 0, null);
     }
     public void actionPerformed(ActionEvent e) {
+        //initial board component based on the value given from jbutton
         Object object = e.getSource();
         if (object.getClass() == jButtons.get(1).getClass()) {
             JButton jButton = (JButton) object;
@@ -142,15 +146,10 @@ public class Menu extends JPanel implements ActionListener {
                 check_button(i,15,18);
                 number_lives = i - 14;
             }
-          /*  if (i == 18) {
-                check_start(i);
-                if(jButton.getBackground() == Color.blue){
-                    start = true;
-                }
-            }*/
         }
     }
     private void check_button(int x, int start, int end) {
+        //check if the button from same list has been pressed before
         JButton jButton = jButtons.get(x);
         for (int i = start; i < end; i++) {
             JButton jButton1 = jButtons.get(i);
@@ -162,7 +161,7 @@ public class Menu extends JPanel implements ActionListener {
         jButton.setBackground(Color.blue);
     }
     public void check_start(JButton jButton){
-     //   JButton jButton = jButtons.get(x);
+        //check if all the button is pressed, if yes then start game condition = 1
         boolean decide = true;
         for(int i = 0; i < 6;i++){
             boolean check = check_start_helper(i + i * 2, i + i * 2 + 3);

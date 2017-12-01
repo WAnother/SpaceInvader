@@ -1,6 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
-
+//base class for the creatures
 public class Sprite implements Common{
     protected Image image;
     protected int x_cor;

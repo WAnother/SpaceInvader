@@ -289,7 +289,6 @@ public class Board extends JPanel implements Common, ActionListener{
             invader.move();
             invader.setMove_down(0);
         }
-
         //Drop bombs
         if(count % bomb_speed == 0) {
             Random random = new Random();
